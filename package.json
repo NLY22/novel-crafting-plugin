@@ -1,0 +1,50 @@
+{
+  "name": "dsh-plugin-novel-crafting",
+  "version": "3.0.0",
+  "description": "工业级全题材长篇中文小说辅助创作引擎 (适配 DeepSeek Harness / Claude Code / Codex / Antigravity)",
+  "main": "core/novel_pipeline.py",
+  "dsh": {
+    "manifestVersion": "1.0",
+    "name": "novel-crafting",
+    "displayName": "小说创作与抗同质化引擎",
+    "category": "creative-writing",
+    "skills": [
+      "SKILL.md"
+    ],
+    "rules": [
+      "AGENTS.md"
+    ],
+    "tools": [
+      {
+        "name": "novel_linter",
+        "entry": "core/novel_linter.py",
+        "description": "代码级小说静态体检与去 AI 味门禁"
+      },
+      {
+        "name": "auto_healer",
+        "entry": "core/auto_healer.py",
+        "description": "定向物理化违规词与段末硬切自愈器"
+      },
+      {
+        "name": "narrative_engine",
+        "entry": "core/narrative_engine.py",
+        "description": "Pass 1 剧力推进与四场次事件骨架断言器"
+      },
+      {
+        "name": "world_state_ledger",
+        "entry": "core/world_state_ledger.py",
+        "description": "长程因果与世界线状态账本"
+      }
+    ]
+  },
+  "keywords": [
+    "deepseek-harness",
+    "claude-code",
+    "codex",
+    "novel-crafting",
+    "creative-writing",
+    "ai-humanizer"
+  ],
+  "author": "Antigravity Novel Studio",
+  "license": "MIT"
+}
