@@ -32,9 +32,10 @@ function Show-Menu {
     Write-Host " [13] 🌐 一键挂载至全生态终端 (Claude Code / DSH / Codex / Antigravity / Cursor)" -ForegroundColor Green
     Write-Host " [14] 🩸 从已写正文提取因果增量 (State Diff) 并同步世界账本" -ForegroundColor White
     Write-Host " [15] 🎯 逐场次多轮执笔提示词生成 (防1200字压缩，锁定3000字)" -ForegroundColor White
+    Write-Host " [16] 🔬 全息小说逆向工程学习机 (提取全部内容/写法/思路/框架/情节/文风/编排)" -ForegroundColor Magenta
     Write-Host " [0] 🚪 退出" -ForegroundColor Gray
     Write-Host "==========================================================" -ForegroundColor Cyan
-    Write-Host -NoNewline "请选择操作 [0-15]: "
+    Write-Host -NoNewline "请选择操作 [0-16]: "
 }
 
 do {
@@ -195,6 +196,28 @@ do {
             Write-Host "`n请输入挂载的作家文风 (如'狐尾的笔'/'刘慈欣'/'顾漫'/'马伯庸'):" -ForegroundColor Yellow
             $sStyle = Read-Host
             python -c "import sys; sys.path.append(r'$CoreDir'); from scene_expander import SceneExpander; e = SceneExpander(); print('\n' + e.get_turn_prompt(int('$sId' if '$sId' else 1), '''$sPlan''', author_style='$sStyle'))"
+            Write-Host "`n按回车键继续..." -ForegroundColor Gray; Read-Host | Out-Null
+        }
+        "16" {
+            Write-Host "`n==========================================================" -ForegroundColor Magenta
+            Write-Host " 🔬 全息小说逆向工程学习机 (Masterpiece Learner)" -ForegroundColor Yellow
+            Write-Host "==========================================================" -ForegroundColor Magenta
+            Write-Host "请输入要深度学习的小说全本或样本 TXT 路径 (支持直接拖拽文件):" -ForegroundColor Yellow
+            $cPath = Read-Host
+            $cPath = $cPath.Trim('"', "'")
+            if ([string]::IsNullOrWhiteSpace($cPath)) {
+                # 优先检查 _全局语料库 或本地 sample
+                $sampleC = Join-Path (Split-Path (Split-Path $ScriptDir -Parent) -Parent) "小说创作\_全局语料库\道诡异仙_狐尾的笔.txt"
+                if (Test-Path $sampleC) { $cPath = $sampleC }
+            }
+            Write-Host "`n请输入精读研习的章节数 (默认 40 章):" -ForegroundColor Yellow
+            $cChaps = Read-Host
+            if ([string]::IsNullOrWhiteSpace($cChaps)) { $cChaps = "40" }
+            if (-not (Test-Path $cPath)) {
+                Write-Host "❌ 文件路径不存在: $cPath" -ForegroundColor Red
+            } else {
+                python -c "import sys; sys.path.append(r'$CoreDir'); from novel_learner import MasterpieceLearner; l = MasterpieceLearner(r'$cPath'); l.load_corpus(); dna, md = l.execute_deep_learning(sample_chapters_count=int('$cChaps'), output_dir=r'$ProfilesDir'); print(f'\n🎉 研习完成！\n📑 参考手册: {md}\n💾 DNA 蓝图: {dna[\"novel_name\"]}.dna.json')"
+            }
             Write-Host "`n按回车键继续..." -ForegroundColor Gray; Read-Host | Out-Null
         }
         "0" {

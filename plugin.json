@@ -2,7 +2,9 @@
   "name": "novel-crafting",
   "displayName": "小说创作引擎 (Novel-Crafting Engine)",
   "description": "工业级全题材长篇中文小说辅助创作引擎。具备 Two-Pass 叙事文风双层解耦、长程因果与世界线状态机 (World State Ledger)、跨章节‘反土拨鼠之日’纵向向量审查器、代码级 Universal Linter 与 Auto-Healer 自愈闭环、名作整卷张力潮汐逆向解构及四场次 3000 字刚性预算控制能力。",
+  "version": "3.2.0",
   "suggestedPrompts": [
+    "启动全息小说逆向工程学习机 (Masterpiece Learner)，对任意名作进行七维全息解构并生成研习手册",
     "启动 Pass 1 叙事驱动引擎，为第 X 章规划四场次分镜事件骨架与信息差断言",
     "挂载名家 Profile，调用 Two-Pass 流水线进行文风渲染与微观/宏观双重质检",
     "运行跨章节‘反土拨鼠之日’纵向审查器，审查首尾段向量余弦相似度与时空拓扑分布",
@@ -11,6 +13,5 @@
     "查看 World State Ledger 因果状态账本简报，核验主角生理伤损倒计时、随身余银与 NPC 疑心矩阵",
     "从已写正文中反向智能提取状态增量 (State Diff)，自动合并更新 World State Ledger 状态机",
     "启动四场次渐进式多轮分场执笔调度 (Multi-Turn Step Prompt)，彻底解决 1200 字压缩快进病"
-  ],
-  "version": "3.1.0"
+  ]
 }

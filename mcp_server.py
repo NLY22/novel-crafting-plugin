@@ -18,6 +18,7 @@ if hasattr(sys.stdout, 'reconfigure'):
 
 # 导入核心模块
 _CURR_DIR = os.path.dirname(os.path.abspath(__file__))
+PLUGIN_ROOT = _CURR_DIR
 _CORE_DIR = os.path.join(_CURR_DIR, "core")
 if _CORE_DIR not in sys.path:
     sys.path.insert(0, _CORE_DIR)
@@ -34,10 +35,11 @@ from branching_generator import generate_branches
 from plot_tracker import PlotTracker
 from state_diff_extractor import StateDiffExtractor
 from scene_expander import SceneExpander
+from novel_learner import MasterpieceLearner
 
 SERVER_INFO = {
     "name": "novel-crafting",
-    "version": "3.0.0"
+    "version": "3.2.0"
 }
 
 TOOLS = [
@@ -189,6 +191,36 @@ TOOLS = [
             },
             "required": ["text"]
         }
+    },
+    {
+        "name": "novel_learn_masterpiece",
+        "description": "【全息小说逆向工程研习器】对任意小说语料进行七维全息逆向工程研习（全息解析其所有内容、写法、思路、框架、情节、文风、文字编排），输出机器级 DNA 蓝图 (.dna.json) 与人类/AI 全息研习参考手册 (.md)。",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "corpus_path": {"type": "string", "description": "小说全本或样本 txt 文件绝对路径"},
+                "chapters": {"type": "integer", "description": "精读并深度拆解的样本章节数，默认 40 章", "default": 40},
+                "output_dir": {"type": "string", "description": "成果保存目录 (默认为 profiles/ 目录)"}
+            },
+            "required": ["corpus_path"]
+        }
+    },
+    {
+        "name": "novel_inspect_masterpiece_dna",
+        "description": "【名作 DNA 蓝图检索器】查询已研习小说的特定维度基准：文字编排呼吸律、文风、写法、心智思路、框架节拍、情节因果或世界观门禁。",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "novel_name": {"type": "string", "description": "小说名称 (如 '大奉打更人_卖报小郎君', '道诡异仙_狐尾的笔', '微微一笑很倾城（出书版）_顾漫')"},
+                "dimension": {
+                    "type": "string",
+                    "description": "查询维度",
+                    "enum": ["all", "typography_pacing", "style_language", "narrative_craft", "author_mindset", "framework_beats", "plot_causality", "world_conception"],
+                    "default": "all"
+                }
+            },
+            "required": ["novel_name"]
+        }
     }
 ]
 
@@ -283,6 +315,64 @@ def handle_tool_call(tool_name, args):
         elif tool_name == "novel_contextual_heal_prompts":
             prompts = _healer.generate_contextual_heal_prompts(args.get("text"))
             return json.dumps(prompts, ensure_ascii=False, indent=2)
+
+        elif tool_name == "novel_learn_masterpiece":
+            corpus_path = args.get("corpus_path")
+            chapters = args.get("chapters", 40)
+            output_dir = args.get("output_dir")
+            learner = MasterpieceLearner(corpus_path)
+            learner.load_corpus()
+            dna, md_path = learner.execute_deep_learning(sample_chapters_count=chapters, output_dir=output_dir)
+            n_name = dna['novel_name']
+            save_dir = output_dir or os.path.dirname(md_path)
+            json_target = os.path.join(save_dir, f"{n_name}.dna.json")
+            return (
+                f"🎉 成功完成对《{n_name}》的七维全息逆向工程研习！\n"
+                f"📊 样本覆盖: 前 {dna['sample_chapters_analyzed']} 章 (共 {dna['sample_char_count']:,} 字)\n"
+                f"📑 全息研习参考手册已生成: {md_path}\n"
+                f"💾 机器级 DNA 蓝图已保存: {json_target}\n\n"
+                f"【核心数理指纹速览】:\n"
+                f"- 段落呼吸: 平均 {dna['dimension_1_typography_pacing']['avg_paragraph_length']} 字/段 | 单句独段率 {dna['dimension_1_typography_pacing']['single_sentence_paragraph_ratio']:.1%}\n"
+                f"- 动作伴随对白比: {dna['dimension_1_typography_pacing']['dialogue_action_weaving']['action_tagged_dialogue_ratio']:.1%}\n"
+                f"- 句式突发度: {dna['dimension_2_style_language']['sentence_burstiness']} ({dna['dimension_2_style_language']['sentence_cadence']['style_category']})\n"
+                f"- 主导感官: {dna['dimension_2_style_language']['dominant_sense']}\n"
+                f"- 镜头焦点: {dna['dimension_3_narrative_craft']['camera_primary_focus']}\n"
+                f"- 断章规范: 动作硬切 {dna['dimension_5_framework_beats']['cliffhanger_hook_distribution']['action_cut']:.1%} | 对白硬切 {dna['dimension_5_framework_beats']['cliffhanger_hook_distribution']['dialogue_cut']:.1%}"
+            )
+
+        elif tool_name == "novel_inspect_masterpiece_dna":
+            novel_name = args.get("novel_name")
+            dimension = args.get("dimension", "all")
+            prof_dir = os.path.join(PLUGIN_ROOT, "profiles")
+            dna_file = os.path.join(prof_dir, f"{novel_name}.dna.json")
+            if not os.path.exists(dna_file):
+                # 尝试模糊匹配
+                matches = [f for f in os.listdir(prof_dir) if novel_name in f and f.endswith(".dna.json")]
+                if matches:
+                    dna_file = os.path.join(prof_dir, matches[0])
+                else:
+                    return f"❌ 未找到《{novel_name}》的 DNA 蓝图，请先调用 novel_learn_masterpiece 进行逆向研习！"
+            
+            with open(dna_file, "r", encoding="utf-8") as f:
+                dna_data = json.load(f)
+
+            dim_key_map = {
+                "typography_pacing": "dimension_1_typography_pacing",
+                "style_language": "dimension_2_style_language",
+                "narrative_craft": "dimension_3_narrative_craft",
+                "author_mindset": "dimension_4_author_mindset",
+                "framework_beats": "dimension_5_framework_beats",
+                "plot_causality": "dimension_6_plot_causality",
+                "world_conception": "dimension_7_world_conception"
+            }
+            if dimension != "all" and dimension in dim_key_map:
+                res = {
+                    "novel_name": dna_data.get("novel_name"),
+                    "dimension": dimension,
+                    "metrics": dna_data.get(dim_key_map[dimension])
+                }
+                return json.dumps(res, ensure_ascii=False, indent=2)
+            return json.dumps(dna_data, ensure_ascii=False, indent=2)
 
         else:
             return f"未知工具: {tool_name}"

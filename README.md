@@ -1,4 +1,4 @@
-# 📖 NovelCrafting-Plugin 工业级通用小说创作引擎 (v3.1.0)
+# 📖 NovelCrafting-Plugin 工业级通用小说创作引擎 (v3.2.0)
 
 > 一款工业级、全题材解耦的中文长篇小说辅助创作与“去 AI 塑料味”双层流水线插件引擎。  
 > 🌟 **全生态原生兼容**：原生适配 **Claude Code (`cc`)**、**DeepSeek Harness (`dsh`)**、**OpenAI Codex (`codex`)**、**Google Antigravity (`agy`)**、**Cursor / Windsurf** 以及 **Obsidian 本地知识库**。
@@ -51,22 +51,23 @@ NovelCrafting-Plugin/
 ├── 📄 install_universal.py         ← 🌟 跨 Agent 一键全平台分发安装脚本
 ├── 🚀 一键安装到所有AI终端.bat      ← Windows 双击一键分发入口
 ├── 🚀 启动助手.bat                 ← Windows 便携双击交互入口
-├── ⚙️ 启动助手.ps1                 ← 交互控制台主逻辑 (13 选 1 极速面板)
+├── ⚙️ 启动助手.ps1                 ← 交互控制台主逻辑 (16 选 1 极速面板)
 │
-├── 📂 core/                        ← 【14 大核心执行引擎模块】
-│   ├── narrative_engine.py        ← 模块1: Pass 1 剧力事件骨架生成与断言器
-│   ├── style_compiler.py          ← 模块2: 一键文风特征挖掘与编译器
-│   ├── prompt_builder.py          ← 模块3: Few-Shot 原著切片与四场次提示词编译
-│   ├── novel_linter.py            ← 模块4: Universal Fiction Linter 代码级质检器
-│   ├── auto_healer.py             ← 模块5: 违规文本自愈修复器 (多变体生理物理化与语境重写)
-│   ├── longitudinal_linter.py     ← 模块6: 跨章节反土拨鼠行为意图原型审查器
-│   ├── world_state_ledger.py      ← 模块7: 长程因果与世界线状态账本 (防吃书)
-│   ├── state_diff_extractor.py    ← 模块8: 正文因果状态增量提取器 (反向更新状态机)
-│   ├── scene_expander.py          ← 模块9: 四场次多轮流式执笔调度引擎 (锁定3000字)
-│   ├── macro_tension_analyzer.py  ← 模块10: 名作整卷张力潮汐逆向解构器 (ASCII心电图)
-│   ├── grill_engine.py            ← 模块11: 总编级 Grill-Me 地基质询器 (6大承重柱)
-│   ├── plot_tracker.py            ← 模块12: 跨章节伏笔与时间锁追踪器
-│   ├── branching_generator.py     ← 模块13: 剧情十字路口 A/B/C 三走向推演
+├── 📂 core/                        ← 【15 大核心执行引擎模块】
+│   ├── novel_learner.py           ← 模块1: 🌟 全息小说深度学习与逆向工程研习机 (七维解构)
+│   ├── narrative_engine.py        ← 模块2: Pass 1 剧力事件骨架生成与断言器
+│   ├── style_compiler.py          ← 模块3: 一键文风特征挖掘与编译器
+│   ├── prompt_builder.py          ← 模块4: Few-Shot 原著切片与四场次提示词编译
+│   ├── novel_linter.py            ← 模块5: Universal Fiction Linter 代码级质检器
+│   ├── auto_healer.py             ← 模块6: 违规文本自愈修复器 (多变体生理物理化与语境重写)
+│   ├── longitudinal_linter.py     ← 模块7: 跨章节反土拨鼠行为意图原型审查器
+│   ├── world_state_ledger.py      ← 模块8: 长程因果与世界线状态账本 (防吃书)
+│   ├── state_diff_extractor.py    ← 模块9: 正文因果状态增量提取器 (反向更新状态机)
+│   ├── scene_expander.py          ← 模块10: 四场次多轮流式执笔调度引擎 (锁定3000字)
+│   ├── macro_tension_analyzer.py  ← 模块11: 名作整卷张力潮汐逆向解构器 (ASCII心电图)
+│   ├── grill_engine.py            ← 模块12: 总编级 Grill-Me 地基质询器 (6大承重柱)
+│   ├── plot_tracker.py            ← 模块13: 跨章节伏笔与时间锁追踪器
+│   ├── branching_generator.py     ← 模块14: 剧情十字路口 A/B/C 三走向推演
 │   └── novel_pipeline.py          ← 双层流水线总调度集成入口
 │
 ├── 📂 profiles/                    ← 【预编译 6 大名家文风画像库】(JSON + MD)
@@ -105,7 +106,8 @@ NovelCrafting-Plugin/
 - **`[12]` 因果状态机简报**：排查主角负伤倒计时、随身银两与 NPC 疑心矩阵（防吃书）；
 - **`[13]` 挂载至全生态终端**：一键将技能与规则自动分发到 CC / DSH / Codex / Antigravity；
 - **`[14]` 提取正文因果增量**：从本章正文中反向挖掘伤情、财富收支与道具消耗，一键更新状态机；
-- **`[15]` 多轮分场执笔调度**：生成单场次专项扩写指令，彻底杜绝单次生成的 1200 字摘要化偏短问题。
+- **`[15]` 多轮分场执笔调度**：生成单场次专项扩写指令，彻底杜绝单次生成的 1200 字摘要化偏短问题；
+- **`[16]` 全息小说逆向工程研习**：对任意小说 TXT 全息提取全部内容、写法、思路、框架、情节、文风与排版呼吸律，输出 DNA 蓝图与参考手册。
 
 ### 方式 2：作为 MCP Server 接入（Claude Code / Cursor / DSH）
 本插件内置纯 Python 标准库实现的 `mcp_server.py`，支持直接挂载为 MCP 工具服务：

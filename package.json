@@ -1,13 +1,12 @@
 {
   "name": "dsh-plugin-novel-crafting",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "工业级全题材长篇中文小说辅助创作引擎 (适配 DeepSeek Harness / Claude Code / Codex / Antigravity)",
   "main": "core/novel_pipeline.py",
   "dsh": {
     "manifestVersion": "1.0",
     "name": "novel-crafting",
     "displayName": "小说创作与抗同质化引擎",
-    "category": "creative-writing",
     "skills": [
       "SKILL.md"
     ],
@@ -15,6 +14,11 @@
       "AGENTS.md"
     ],
     "tools": [
+      {
+        "name": "novel_learner",
+        "entry": "core/novel_learner.py",
+        "description": "七维全息小说深度学习与逆向工程研习机"
+      },
       {
         "name": "novel_linter",
         "entry": "core/novel_linter.py",

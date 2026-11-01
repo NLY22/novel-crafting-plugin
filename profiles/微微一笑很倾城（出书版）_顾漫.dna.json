@@ -1,0 +1,124 @@
+{
+  "version": "3.2.0",
+  "novel_name": "微微一笑很倾城（出书版）_顾漫",
+  "sample_chapters_analyzed": 20,
+  "sample_char_count": 56818,
+  "dimension_1_typography_pacing": {
+    "avg_paragraph_length": 36.7,
+    "paragraph_length_variance": 30.7,
+    "paragraph_distribution": {
+      "ultra_short_ratio_le_25": 0.4799,
+      "short_ratio_26_60": 0.3304,
+      "medium_ratio_61_140": 0.1788,
+      "long_ratio_gt_140": 0.011
+    },
+    "single_sentence_paragraph_ratio": 0.5619,
+    "dialogue_action_weaving": {
+      "pure_dialogue_ratio": 0.1114,
+      "action_tagged_dialogue_ratio": 0.3172,
+      "pure_narrative_ratio": 0.5714,
+      "beat_weaving_density": "高密度动作穿插"
+    },
+    "punctuation_fingerprint": {
+      "dash_per_kilo": 0.53,
+      "ellipsis_per_kilo": 3.04,
+      "question_per_kilo": 4.15,
+      "exclamation_per_kilo": 3.68,
+      "comma_to_period_ratio": 2.61,
+      "pacing_speed": "延展抒情/推理流 (长句延展)"
+    }
+  },
+  "dimension_2_style_language": {
+    "sentence_burstiness": 0.753,
+    "avg_sentence_length": 28.4,
+    "sentence_cadence": {
+      "short_sentence_ratio_le_12": 0.2603,
+      "long_sentence_ratio_ge_35": 0.3076,
+      "style_category": "短促爆破与动词推进型"
+    },
+    "sensory_channel_weights": {
+      "tactile": 0.4444,
+      "auditory": 0.0,
+      "olfactory_gustatory": 0.0,
+      "visual_lighting": 0.5556
+    },
+    "dominant_sense": "visual_lighting",
+    "dynamic_tension_ratio": 0.289,
+    "verb_orientation": "静谧凝练/心理铺垫偏好",
+    "metaphor_density_per_kilo": 0.23
+  },
+  "dimension_3_narrative_craft": {
+    "pov_strategy": "限知第三人称跟随视角 (Close Third-Person POV)",
+    "camera_framing_distribution": {
+      "close_up_ratio": 0.0,
+      "medium_shot_ratio": 0.25,
+      "wide_shot_ratio": 0.75
+    },
+    "camera_primary_focus": "宏观全景俯瞰：重在阵营局势、环境风貌与大场面气势",
+    "subtext_density_per_kilo": 2.73,
+    "narrative_temperament": "高压潜台词博弈型"
+  },
+  "dimension_4_author_mindset": {
+    "escalation_ladder": {
+      "level_1_physical": "外部环境与敌对力量正面交锋",
+      "level_2_rules_hierarchy": "体制戒律、超凡法则或阶级规训施压",
+      "level_3_ethical_dilemma": "两难权衡与两害相权取其轻的终极抉择"
+    },
+    "cost_compensation_ratio": 0.0,
+    "mindset_rules": [
+      "绝对拒绝机械降神：主角破局必须依靠自身专业技能或预先埋设的信息差",
+      "代价法则严苛：绝无免费外挂，凡力量跃迁必伴随不可逆消耗或副作用",
+      "装逼必须有'垫子'：先有长辈/强敌看衰与重压蓄势，而后公堂/当众绝杀"
+    ]
+  },
+  "dimension_5_framework_beats": {
+    "chapter_opening_distribution": {
+      "突发对白/行动切入型": 0.85,
+      "环境交代/叙事切入型": 0.15
+    },
+    "cliffhanger_hook_distribution": {
+      "action_cut": 0.0,
+      "dialogue_cut": 0.45,
+      "anomaly_cut": 0.0,
+      "preach_cut": 0.0,
+      "other_cut": 0.55
+    },
+    "cliffhanger_compliance": "优秀 (零哲学升华说教，动作与对白硬切为主)",
+    "four_scene_budget_standard": {
+      "scene_1": "20% (600-800字) - 生理承接与切入，拒绝发呆洗脸",
+      "scene_2": "30% (900-1100字) - 多方交锋与实质信息差",
+      "scene_3": "30% (900-1100字) - 矛盾升级与冒险决断",
+      "scene_4": "20% (500-700字) - 悬念硬切定格，绝不鸡汤升华"
+    }
+  },
+  "dimension_6_plot_causality": {
+    "causal_adversative_density_per_kilo": 1.88,
+    "and_then_weak_narrative_density": 0.74,
+    "causality_tightness_ratio": 2.55,
+    "plot_driving_style": "高密度强因果博弈 ('Therefore / But' 驱动)",
+    "information_gap_patterns": [
+      "身份马甲与单向透明：主角掌握暗线情报网（如匿名通讯/双重身份），对手蒙在鼓里",
+      "认知降维打击：主角凭借专业刑侦/物理/现代逻辑，从微小破绽逆推真相",
+      "延时揭秘：核心底牌在危机爆发前 3 章预埋，在绝境关头完成伏笔闭环"
+    ]
+  },
+  "dimension_7_world_conception": {
+    "power_hierarchy_keywords": [
+      "九品超凡体系",
+      "官僚体制品阶"
+    ],
+    "faction_domains": [
+      "帮",
+      "门",
+      "部",
+      "阁",
+      "司",
+      "军"
+    ],
+    "core_rules_constraints": [
+      "超凡力量与世界法则严苛绑定，每种职业体系具备绝对弱点（如武夫神魂弱、术士受天谴、儒家耗寿元）",
+      "世俗王权与超凡宗门双轨并存，主角依托体制内暴力特权机构展开行动",
+      "资源有限性：超凡丹药、法宝、气运皆具零和博弈属性"
+    ]
+  }
+}
