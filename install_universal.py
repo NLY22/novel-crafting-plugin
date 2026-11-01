@@ -30,6 +30,11 @@ print(f"🏠 用户主目录: {USER_HOME}\n")
 
 installed_targets = []
 
+def safe_copy_tree(src, dst):
+    """Safely copy directory tree avoiding __pycache__ lock issues and merging smoothly."""
+    os.makedirs(dst, exist_ok=True)
+    shutil.copytree(src, dst, dirs_exist_ok=True, ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
+
 # -------------------------------------------------------------
 # 1. 安装至 Claude Code (cc)
 # -------------------------------------------------------------
@@ -42,15 +47,8 @@ try:
     shutil.copy2(os.path.join(SOURCE_DIR, "CLAUDE.md"), os.path.join(claude_skills_dir, "CLAUDE.md"))
     
     # 复制 core 与 profiles
-    dest_core = os.path.join(claude_skills_dir, "core")
-    if os.path.exists(dest_core):
-        shutil.rmtree(dest_core)
-    shutil.copytree(os.path.join(SOURCE_DIR, "core"), dest_core)
-
-    dest_profiles = os.path.join(claude_skills_dir, "profiles")
-    if os.path.exists(dest_profiles):
-        shutil.rmtree(dest_profiles)
-    shutil.copytree(os.path.join(SOURCE_DIR, "profiles"), dest_profiles)
+    safe_copy_tree(os.path.join(SOURCE_DIR, "core"), os.path.join(claude_skills_dir, "core"))
+    safe_copy_tree(os.path.join(SOURCE_DIR, "profiles"), os.path.join(claude_skills_dir, "profiles"))
 
     # 拷贝 MCP 服务器脚本
     shutil.copy2(os.path.join(SOURCE_DIR, "mcp_server.py"), os.path.join(claude_skills_dir, "mcp_server.py"))
@@ -90,15 +88,8 @@ try:
     shutil.copy2(os.path.join(SOURCE_DIR, "AGENTS.md"), os.path.join(dsh_skills_dir, "AGENTS.md"))
     shutil.copy2(os.path.join(SOURCE_DIR, "mcp_server.py"), os.path.join(dsh_skills_dir, "mcp_server.py"))
 
-    dest_core_dsh = os.path.join(dsh_skills_dir, "core")
-    if os.path.exists(dest_core_dsh):
-        shutil.rmtree(dest_core_dsh)
-    shutil.copytree(os.path.join(SOURCE_DIR, "core"), dest_core_dsh)
-
-    dest_prof_dsh = os.path.join(dsh_skills_dir, "profiles")
-    if os.path.exists(dest_prof_dsh):
-        shutil.rmtree(dest_prof_dsh)
-    shutil.copytree(os.path.join(SOURCE_DIR, "profiles"), dest_prof_dsh)
+    safe_copy_tree(os.path.join(SOURCE_DIR, "core"), os.path.join(dsh_skills_dir, "core"))
+    safe_copy_tree(os.path.join(SOURCE_DIR, "profiles"), os.path.join(dsh_skills_dir, "profiles"))
 
     installed_targets.append("DeepSeek Harness (dsh) 官方技能目录 (~/.agents/skills/novel-crafting/)")
     print("✅ [2/5] DeepSeek Harness (dsh) 安装成功！")
@@ -138,18 +129,12 @@ try:
     shutil.copy2(os.path.join(SOURCE_DIR, "SKILL.md"), os.path.join(agy_skills_dir, "SKILL.md"))
 
     # core & scripts
-    for target_name in ["core", "scripts"]:
-        t_dir = os.path.join(agy_plugin_dir, target_name if target_name == "core" else "skills/novel-crafting/scripts")
-        if os.path.exists(t_dir):
-            shutil.rmtree(t_dir)
-        shutil.copytree(os.path.join(SOURCE_DIR, "core"), t_dir)
+    safe_copy_tree(os.path.join(SOURCE_DIR, "core"), os.path.join(agy_plugin_dir, "core"))
+    safe_copy_tree(os.path.join(SOURCE_DIR, "core"), os.path.join(agy_plugin_dir, "skills", "novel-crafting", "scripts"))
 
     # profiles
-    for target_name in ["profiles", "skills/novel-crafting/profiles"]:
-        t_dir = os.path.join(agy_plugin_dir, target_name)
-        if os.path.exists(t_dir):
-            shutil.rmtree(t_dir)
-        shutil.copytree(os.path.join(SOURCE_DIR, "profiles"), t_dir)
+    safe_copy_tree(os.path.join(SOURCE_DIR, "profiles"), os.path.join(agy_plugin_dir, "profiles"))
+    safe_copy_tree(os.path.join(SOURCE_DIR, "profiles"), os.path.join(agy_plugin_dir, "skills", "novel-crafting", "profiles"))
 
     # mcp_server
     shutil.copy2(os.path.join(SOURCE_DIR, "mcp_server.py"), os.path.join(agy_plugin_dir, "mcp_server.py"))
