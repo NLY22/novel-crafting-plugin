@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-四场次逐级渐进执笔与字数保底引擎 (Progressive Scene Expander) - Plugin Core Module
-通用小说工程化工具核心生成调度器。
-彻底根除单次黑盒生成导致的字数严重偏短（1200字草率收尾）与剧情摘要化快进病。
+四场次逐级渐进执笔与字数保底引擎 (Progressive Scene Expander & Multi-Turn Orchestrator) - Plugin Core Module
+通用小说工程化工具核心生成调度器 (v3.1)。
+通过多轮渐进式分场次执行协议 (Multi-Turn Step Protocol)，彻底根除大模型单次生成注意力衰减与 1200 字摘要化收尾病。
 """
 
 import sys
@@ -28,10 +28,30 @@ class SceneExpander:
     """四场次物理刚性预算逐级生成器"""
 
     SCENE_TARGETS = {
-        1: {"name": "Scene 1: 生理承接与切入", "min_words": 600, "ideal_words": 800},
-        2: {"name": "Scene 2: 多方交锋与信息差", "min_words": 800, "ideal_words": 1000},
-        3: {"name": "Scene 3: 矛盾升级与行动决断", "min_words": 800, "ideal_words": 1000},
-        4: {"name": "Scene 4: 悬念断章与物理硬切", "min_words": 500, "ideal_words": 700}
+        1: {
+            "name": "Scene 1: 生理承接与冲突切入",
+            "min_words": 600,
+            "ideal_words": 800,
+            "focus": "承接上章伤势与消耗，直接在动作准备中切入，严禁发呆洗脸叹气"
+        },
+        2: {
+            "name": "Scene 2: 多方交锋与实质信息差",
+            "min_words": 800,
+            "ideal_words": 1000,
+            "focus": "登场人物试探、至少3轮潜台词博弈，必须产生实质信息增量或认知反差"
+        },
+        3: {
+            "name": "Scene 3: 矛盾升级与冒险决断",
+            "min_words": 800,
+            "ideal_words": 1000,
+            "focus": "局势突变失衡，主角做出带有代价的决断，正面动作对抗引爆"
+        },
+        4: {
+            "name": "Scene 4: 悬念断章与物理硬切",
+            "min_words": 500,
+            "ideal_words": 700,
+            "focus": "局势不可逆收紧，严禁人生导师哲学感叹，定格在动作或器物异象上"
+        }
     }
 
     def __init__(self, profile_name=None):
@@ -41,7 +61,7 @@ class SceneExpander:
         """校验单个场次的字数容量与描写深度"""
         clean = scene_text.strip()
         char_count = len(clean)
-        target = self.SCENE_TARGETS.get(scene_id, {"min_words": 600, "ideal_words": 800})
+        target = self.SCENE_TARGETS.get(scene_id, {"min_words": 600, "ideal_words": 800, "name": f"Scene {scene_id}"})
         
         passed = char_count >= target["min_words"]
         warning = None
@@ -91,8 +111,38 @@ class SceneExpander:
             )
         }
 
+    # -------------------------------------------------------------
+    # 多轮渐进式分场次执行协议 (Multi-Turn Step Orchestrator)
+    # -------------------------------------------------------------
+    def get_turn_prompt(self, scene_id, scene_plan_detail, prev_scene_tail="", author_style="名家风格"):
+        """
+        为 AI 终端 (Claude Code / DSH / Codex) 生成单个场次的专项扩写指令
+        """
+        target = self.SCENE_TARGETS.get(scene_id, {"min_words": 700, "ideal_words": 900, "name": f"Scene {scene_id}", "focus": "推进剧情"})
+        
+        prompt_lines = [
+            f"🎬 【分场专项执笔任务: {target['name']}】",
+            f"--------------------------------------------------",
+            f"🎯 核心聚焦: {target['focus']}",
+            f"📐 本场硬性容量要求: 严格锁定在 {target['min_words']} ~ {target['ideal_words']} 字区间！",
+            f"🛑 严禁越俎代庖: 【本轮仅写该场次，绝对严禁提前写后续剧情，严禁提前收尾总结！】",
+            f"🎭 挂载文风: {author_style}",
+            f"📋 本场具体细分动作规划: {scene_plan_detail}"
+        ]
+
+        if prev_scene_tail:
+            prompt_lines.append(f"🔗 上场接缝定格 (请紧密无缝咬合该动作推进): ...{prev_scene_tail[-100:]}")
+
+        prompt_lines.append("--------------------------------------------------")
+        prompt_lines.append("✍️ 请立即输出本场次正文（无需输出标题或开场白，直接以正文行动切入）:")
+        return "\n".join(prompt_lines)
+
 if __name__ == "__main__":
-    expander = SceneExpander()
+    expander = SceneExpander("道诡异仙")
+    print("=== 多轮分场调度指令测试 ===")
+    p1 = expander.get_turn_prompt(1, "李火旺顶着寒风捣药，后脑刺痛，发现药臼底部的硬块与骨渣。")
+    print(p1[:300], "...\n")
+    
     sample_scenes = {
         1: "李火旺顶着寒风捣药，后脑刺痛，发现药臼底部的硬块与骨渣。" * 25,  # 约 750 字
         2: "二师兄提着铜油灯进来查账，两人带着潜台词交锋，李火旺装疯卖傻掩饰心虚。" * 30, # 约 1050 字

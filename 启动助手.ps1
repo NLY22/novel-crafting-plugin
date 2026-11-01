@@ -30,9 +30,11 @@ function Show-Menu {
     Write-Host " [11] 🌊 逆向名作整卷“张力潮汐心电图” (解构前20章波浪式生命呼吸律动)" -ForegroundColor White
     Write-Host " [12] 📋 查看 World State Ledger 因果状态简报 (防吃书: 生理伤势/余银/NPC疑心度)" -ForegroundColor White
     Write-Host " [13] 🌐 一键挂载至全生态终端 (Claude Code / DSH / Codex / Antigravity / Cursor)" -ForegroundColor Green
+    Write-Host " [14] 🩸 从已写正文提取因果增量 (State Diff) 并同步世界账本" -ForegroundColor White
+    Write-Host " [15] 🎯 逐场次多轮执笔提示词生成 (防1200字压缩，锁定3000字)" -ForegroundColor White
     Write-Host " [0] 🚪 退出" -ForegroundColor Gray
     Write-Host "==========================================================" -ForegroundColor Cyan
-    Write-Host -NoNewline "请选择操作 [0-13]: "
+    Write-Host -NoNewline "请选择操作 [0-15]: "
 }
 
 do {
@@ -169,6 +171,30 @@ do {
         }
         "13" {
             python (Join-Path $ScriptDir "install_universal.py")
+            Write-Host "`n按回车键继续..." -ForegroundColor Gray; Read-Host | Out-Null
+        }
+        "14" {
+            Write-Host "`n请输入章节号 (如 5):" -ForegroundColor Yellow
+            $cNum = Read-Host
+            Write-Host "`n请输入已写正文 TXT/MD 路径 (或直接输入片段):" -ForegroundColor Yellow
+            $cText = Read-Host
+            $cText = $cText.Trim('"', "'")
+            if (Test-Path $cText) {
+                $rawText = Get-Content $cText -Raw -Encoding UTF8
+            } else {
+                $rawText = $cText
+            }
+            python -c "import sys; sys.path.append(r'$CoreDir'); from state_diff_extractor import StateDiffExtractor; e = StateDiffExtractor(); diff = e.extract_diff_from_chapter(int('$cNum' if '$cNum' else 1), '''$rawText'''); print('📋 提取到的增量:'); [print(' *', a) for a in diff['suggested_actions']]; brief = e.apply_diff_to_ledger(diff); print('\n✅ 状态机账本已同步更新:\n', brief)"
+            Write-Host "`n按回车键继续..." -ForegroundColor Gray; Read-Host | Out-Null
+        }
+        "15" {
+            Write-Host "`n请选择当前要执笔的场次编号 [1-4]:" -ForegroundColor Yellow
+            $sId = Read-Host
+            Write-Host "`n请输入该场次的动作推进细化剧情:" -ForegroundColor Yellow
+            $sPlan = Read-Host
+            Write-Host "`n请输入挂载的作家文风 (如'狐尾的笔'/'刘慈欣'/'顾漫'/'马伯庸'):" -ForegroundColor Yellow
+            $sStyle = Read-Host
+            python -c "import sys; sys.path.append(r'$CoreDir'); from scene_expander import SceneExpander; e = SceneExpander(); print('\n' + e.get_turn_prompt(int('$sId' if '$sId' else 1), '''$sPlan''', author_style='$sStyle'))"
             Write-Host "`n按回车键继续..." -ForegroundColor Gray; Read-Host | Out-Null
         }
         "0" {

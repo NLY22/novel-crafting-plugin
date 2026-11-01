@@ -1,0 +1,32 @@
+{
+  "corpus_name": "三体_刘慈欣",
+  "crafting_guidance": {
+    "author_style": "刘慈欣（硬核科幻 / 宏观宇宙哲学 / 冷峻现实主义）",
+    "narrative_voice": "冷静客观如科学报告、以宏大物理规律与宇宙尺度审视微观人类、冷峻而富有理性诗意",
+    "opening_technique": "直接以重大的科技异象、理论危机、冷酷现实困境或前沿学术交锋切入",
+    "internal_monologue": "拒绝泛滥的无病呻吟，角色思考集中于技术推导、文明存亡博弈与不可逆自然法则",
+    "dialogue_subtext": "学者与战略家式的理智交锋，言语精炼平实，字面不露声色但背后是文明存亡量级的压迫感",
+    "forbidden_tones": [
+      "严禁日漫轻小说式的无厘头中二喊招",
+      "严禁滥俗都市相亲霸总言情调",
+      "严禁感伤主义的小资情调鸡汤"
+    ]
+  },
+  "metrics": {
+    "dialogue_ratio": 0.38,
+    "pure_scenery_ratio": 0.12,
+    "metaphor_density_per_kilo": 1.8,
+    "avg_sentence_len": 24,
+    "burstiness": 0.62
+  },
+  "exemplars": {
+    "opening": "汪淼觉得，来找他的这四个人是一个奇怪的组合：两名警察和两名军人，如果那两个军人是武警还算正常，但这是两名陆军军官。汪淼第一眼就对其中的一名警察产生了反感，那人长得很魁梧，大腹便便，穿着件脏兮兮的皮夹克，浑身烟味，说话粗声粗气。",
+    "dialogue": "“丁仪，你的球打得很好。”汪淼说。\n“你也能打得这么好，如果你的物理学得像我一样好的话。”丁仪把球杆递给球童，点上一支雪茄，“知道刚才我做了一件什么伟大的事情吗？我把宇宙规律的平移对称性给打破了。”\n汪淼在沙发上坐下来，盯着丁仪：“你的理论物理实验，真的全停了？”\n“全完了。”丁仪吐出一口青烟，“物理学从来就没有存在过，将来也不会存在。”"
+  },
+  "linter_thresholds": {
+    "max_metaphors_per_400_chars": 1,
+    "max_scene_ratio": 0.14,
+    "prohibit_summary_ending": true,
+    "min_burstiness": 0.60
+  }
+}

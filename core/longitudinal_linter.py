@@ -54,7 +54,60 @@ class VectorMath:
         return dot_product / (norm1 * norm2)
 
 class LongitudinalLinter:
-    """跨章节纵向审计引擎"""
+    """跨章节纵向审计引擎 (v3.1: 搭载行为意图模式状态机，杜绝同义同构重述)"""
+
+    # 宏观行为原型库 (Behavioral Archetypes)
+    BEHAVIORAL_ARCHETYPES_OPENING = [
+        {
+            "id": "ARCH_DAWN_WAKE_EXIT",
+            "name": "【破晓苏醒/推门打卡起手式】",
+            "sememes": [
+                r"(?:清晨|一早|拂晓|破晓|天边泛白|旭日|晓日|晨光|红日东升|红彤彤的|第一缕|睁开眼|醒来|睡眼惺忪|打了个哈欠|伸了个懒腰)",
+                r"(?:跨出|推门|迈步|走出|下床|迈出门槛|离开房间|走向院落|走向工位|推开房门)"
+            ],
+            "description": "连续章节以破晓苏醒、打哈欠伸懒腰、推门下床开篇，流水账痕迹严重"
+        },
+        {
+            "id": "ARCH_EATING_BREAKFAST",
+            "name": "【琐碎早餐/进食开局】",
+            "sememes": [
+                r"(?:早餐|豆浆|油条|包子|面汤|馒头|灵谷|粥|干粮|茶点|早市|热气腾腾)",
+                r"(?:咬了一口|咀嚼|咽下|吞咽|喝了半碗|就着|盛了|吃着)"
+            ],
+            "description": "连续章节以吃早饭、喝面汤等日常进食琐事开局，缺乏戏剧阻力"
+        },
+        {
+            "id": "ARCH_DESK_PONDERING",
+            "name": "【静坐工位/书案发呆】",
+            "sememes": [
+                r"(?:书案|书房|工位|电脑前|案牍|静室|蒲团|密室)",
+                r"(?:揉着眉心|端坐|手指轻敲|盯着屏幕|凝视着玉简|发呆|沉吟不语|敲击键盘)"
+            ],
+            "description": "连续章节以主角在封闭书房/工位/蒲团上独自发呆思索开局"
+        }
+    ]
+
+    BEHAVIORAL_ARCHETYPES_ENDING = [
+        {
+            "id": "ARCH_WINDOW_TEA_SIGH",
+            "name": "【凭窗看夜景/抿茶叹气收口】",
+            "sememes": [
+                r"(?:窗外|夜色|月色|远方的天际|繁星|残阳|街景|雨夜|灯火辉煌)",
+                r"(?:端起|抿了一口|抿着|握着茶盏|端起茶杯|端起酒碗|抿了抿)",
+                r"(?:长长叹了一口气|吐出一口浊气|陷入了沉思|不知道未来|若有所思|幽幽叹道)"
+            ],
+            "description": "连续章节以看窗外夜景、抿一口茶水、叹一口气收口，属于典型 AI 机械式收尾"
+        },
+        {
+            "id": "ARCH_BED_SLEEP_CUT",
+            "name": "【上床睡觉/吹灯打卡收口】",
+            "sememes": [
+                r"(?:床榻|被褥|油灯|合上双眼|吹灭|熄灭|闭目|打坐入定|熄灯)",
+                r"(?:一夜无话|沉沉睡去|夜色已深|明日再说|安然入睡|准备休息)"
+            ],
+            "description": "章节末尾以主角吹灯睡觉、躺下休息收口，缺乏断章钩子与悬念张力"
+        }
+    ]
 
     CLICHE_OPENINGS = [
         (r"(?:清晨|一早|醒来|睁开眼|阳光透过|闹钟|伸了个懒腰)", "千篇一律早晨清醒起手"),
@@ -197,36 +250,53 @@ class LongitudinalLinter:
             max_head_sim = max(head_sim_1, head_sim_2)
             max_tail_sim = max(tail_sim_1, tail_sim_2)
             
-            # 2. 模式套路碰撞
+            # 2. 行为意图原型与套路碰撞 (同义同构重述也能精准拦截)
             head_collision = None
-            for pat, desc in self.CLICHE_OPENINGS:
-                if re.search(pat, cur_head) and re.search(pat, p1_head):
-                    head_collision = desc
+            for arch in self.BEHAVIORAL_ARCHETYPES_OPENING:
+                cur_match = all(re.search(s, cur_head) for s in arch["sememes"])
+                p1_match = all(re.search(s, p1_head) for s in arch["sememes"])
+                if cur_match and p1_match:
+                    head_collision = f"{arch['name']}: {arch['description']}"
                     break
+            if not head_collision:
+                for pat, desc in self.CLICHE_OPENINGS:
+                    if re.search(pat, cur_head) and re.search(pat, p1_head):
+                        head_collision = desc
+                        break
                     
             tail_collision = None
-            for pat, desc in self.CLICHE_ENDINGS:
-                if re.search(pat, cur_tail) and re.search(pat, p1_tail):
-                    tail_collision = desc
+            for arch in self.BEHAVIORAL_ARCHETYPES_ENDING:
+                cur_match = all(re.search(s, cur_tail) for s in arch["sememes"])
+                p1_match = all(re.search(s, p1_tail) for s in arch["sememes"])
+                if cur_match and p1_match:
+                    tail_collision = f"{arch['name']}: {arch['description']}"
                     break
+            if not tail_collision:
+                for pat, desc in self.CLICHE_ENDINGS:
+                    if re.search(pat, cur_tail) and re.search(pat, p1_tail):
+                        tail_collision = desc
+                        break
 
             is_violation = max_head_sim >= 0.65 or max_tail_sim >= 0.65 or head_collision or tail_collision
             
             if is_violation:
+                msg = (
+                    f"🚨 【跨章结构同质化告警 (Structural Homogenization Error)】\n"
+                    f"  * 《{cur['title']}》与前作起手式相似度: {max_head_sim:.1%} | 收口式相似度: {max_tail_sim:.1%}\n"
+                    + (f"  * 起手式连续陷入套路: 【{head_collision}】！\n" if head_collision else "")
+                    + (f"  * 收口式连续陷入套路: 【{tail_collision}】！\n" if tail_collision else "")
+                    + f"  * 治理建议: 强制推翻当前起手/收尾，改用中途突变、对白破局或突发行动硬切！"
+                )
                 reports.append({
+                    "is_violation": True,
                     "chapter": cur["title"],
                     "prev_chapter": prev1["title"],
                     "head_similarity": round(max_head_sim, 3),
                     "tail_similarity": round(max_tail_sim, 3),
                     "head_collision": head_collision,
                     "tail_collision": tail_collision,
-                    "message": (
-                        f"🚨 【跨章结构同质化告警 (Structural Homogenization Error)】\n"
-                        f"  * 《{cur['title']}》与前作起手式相似度: {max_head_sim:.1%} | 收口式相似度: {max_tail_sim:.1%}\n"
-                        + (f"  * 起手式连续陷入套路: 【{head_collision}】！\n" if head_collision else "")
-                        + (f"  * 收口式连续陷入套路: 【{tail_collision}】！\n" if tail_collision else "")
-                        + f"  * 治理建议: 强制推翻当前起手/收尾，改用中途突变、对白破局或突发行动硬切！"
-                    )
+                    "fix_suggestion": msg,
+                    "message": msg
                 })
                 
         return reports

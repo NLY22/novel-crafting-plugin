@@ -1,6 +1,6 @@
 {
   "name": "dsh-plugin-novel-crafting",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "工业级全题材长篇中文小说辅助创作引擎 (适配 DeepSeek Harness / Claude Code / Codex / Antigravity)",
   "main": "core/novel_pipeline.py",
   "dsh": {

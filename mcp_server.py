@@ -32,6 +32,8 @@ from world_state_ledger import WorldStateLedger
 from macro_tension_analyzer import MacroTensionAnalyzer
 from branching_generator import generate_branches
 from plot_tracker import PlotTracker
+from state_diff_extractor import StateDiffExtractor
+from scene_expander import SceneExpander
 
 SERVER_INFO = {
     "name": "novel-crafting",
@@ -149,6 +151,44 @@ TOOLS = [
             },
             "required": ["chapter_num"]
         }
+    },
+    {
+        "name": "novel_extract_state_diff",
+        "description": "【正文因果差量提取与状态机同步】分析已写就的章节正文，自动反向提取伤势、银钱开支、道具增减与时间流逝，可自动更新合并至 World State Ledger。",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "chapter_num": {"type": "integer", "description": "当前章节号"},
+                "text": {"type": "string", "description": "本章正文内容"},
+                "apply_to_ledger": {"type": "boolean", "description": "是否直接合并更新至状态机账本", "default": True}
+            },
+            "required": ["chapter_num", "text"]
+        }
+    },
+    {
+        "name": "novel_progressive_turn_prompt",
+        "description": "【四场次多轮渐进式生成调度】为特定场次 (Scene 1-4) 编译专项扩写指令，强制锁定该场次字数与描写焦点，彻底根除 1200 字仓促大纲快进病。",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "scene_id": {"type": "integer", "description": "场次编号 (1-4)"},
+                "scene_plan_detail": {"type": "string", "description": "本场细分动作规划"},
+                "prev_scene_tail": {"type": "string", "description": "上一场次结尾的最后两句话 (用于咬合接缝)", "default": ""},
+                "author_style": {"type": "string", "description": "名家文风风格描述", "default": "名家风格"}
+            },
+            "required": ["scene_id", "scene_plan_detail"]
+        }
+    },
+    {
+        "name": "novel_contextual_heal_prompts",
+        "description": "【局域语境手术级重写提示词】提取草稿中违规词的前后上下文窗口，为 AI Agent 生成上下文无缝重写提示，杜绝任何机械代换痕迹。",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "text": {"type": "string", "description": "草稿正文"}
+            },
+            "required": ["text"]
+        }
     }
 ]
 
@@ -160,6 +200,8 @@ _longitudinal_linter = LongitudinalLinter()
 _world_ledger = WorldStateLedger()
 _macro_analyzer = MacroTensionAnalyzer()
 _plot_tracker = PlotTracker()
+_diff_extractor = StateDiffExtractor(_world_ledger)
+_scene_expander = SceneExpander()
 
 def handle_tool_call(tool_name, args):
     try:
@@ -222,6 +264,25 @@ def handle_tool_call(tool_name, args):
         elif tool_name == "novel_due_reminders":
             reminders = _plot_tracker.get_due_reminders(args.get("chapter_num"))
             return json.dumps(reminders, ensure_ascii=False, indent=2)
+
+        elif tool_name == "novel_extract_state_diff":
+            diff = _diff_extractor.extract_diff_from_chapter(args.get("chapter_num"), args.get("text"))
+            if args.get("apply_to_ledger", True):
+                brief = _diff_extractor.apply_diff_to_ledger(diff)
+                diff["updated_ledger_brief"] = brief
+            return json.dumps(diff, ensure_ascii=False, indent=2)
+
+        elif tool_name == "novel_progressive_turn_prompt":
+            return _scene_expander.get_turn_prompt(
+                args.get("scene_id"),
+                args.get("scene_plan_detail"),
+                args.get("prev_scene_tail", ""),
+                args.get("author_style", "名家风格")
+            )
+
+        elif tool_name == "novel_contextual_heal_prompts":
+            prompts = _healer.generate_contextual_heal_prompts(args.get("text"))
+            return json.dumps(prompts, ensure_ascii=False, indent=2)
 
         else:
             return f"未知工具: {tool_name}"

@@ -7,13 +7,13 @@ allowed-tools:
   - Edit
   - RunCommand
 metadata:
-  version: "3.0.0"
+  version: "3.1.0"
   author: "Antigravity Novel Studio"
 ---
 
-# 📖 Novel-Crafting Engine - 工业级中文小说创作技能操作指南 (v3.0)
+# 📖 Novel-Crafting Engine - 工业级中文小说创作技能操作指南 (v3.1)
 
-当用户在构思全题材长篇小说（都市言情、仙侠修真、民俗克苏鲁、悬疑推理、科幻无限流）、规划整卷大纲、进行到期暗线排查、推演戏剧分叉、组织四场次事件骨架、进行名家文风渲染编译、执行代码级去 AI 味体检与自动自愈、或进行跨章节纵向抗同质化审查时，必须激活并严格遵守本指南。
+当用户在构思全题材长篇小说（都市言情、仙侠修真、民俗克苏鲁、悬疑推理、科幻无限流）、规划整卷大纲、进行到期暗线排查、推演戏剧分叉、组织四场次事件骨架、进行名家文风渲染编译、执行代码级去 AI 味体检与自动自愈、从正文提取因果增量更新账本、或进行跨章节纵向抗同质化审查时，必须激活并严格遵守本指南。
 
 ---
 
@@ -94,17 +94,33 @@ metadata:
 
 ---
 
+### 模式 8：因果增量提取与状态机闭环 (`提取正文因果增量`)
+正文创作并通过质检后，运行 `core/state_diff_extractor.py` 反向挖掘本章产生的真实因果增量（伤势恶化/愈合倒计时、财富收支、道具消耗与时间跳跃），一键自动更新合并至 `WorldStateLedger`，彻底告别死账本与跨章吃书。
+
+---
+
+### 模式 9：四场次多轮渐进执笔调度 (`分场次多轮执笔`)
+针对大模型在单次长文生成中的注意力衰减与 1200 字压缩快进病，调用 `core/scene_expander.py` 的 `get_turn_prompt`：
+- **Turn 1**：仅写 Scene 1（700~800字）生理切入，严禁提前推进；
+- **Turn 2**：咬合上场结尾，仅写 Scene 2（900~1100字）实质信息差对白博弈；
+- **Turn 3**：仅写 Scene 3（900~1100字）矛盾升级与冒险决断；
+- **Turn 4**：仅写 Scene 4（500~700字）动作器物硬切定格；
+- 最后执行 `stitch_chapter` 自动缝合为 3,000 字标准大章。
+
+---
+
 ## 🛠️ 核心引擎工具调用速查表
 
 | 功能模块 | 终端命令 / Python 接口 |
 | :--- | :--- |
 | **Pass 1 剧力事件骨架断言** | `python core/narrative_engine.py` |
 | **Pass 2 文风 Few-Shot 提示词编译** | `python core/prompt_builder.py` |
+| **四场次分轮扩写指令生成** | `python core/scene_expander.py` |
 | **微观 Universal Linter 质检** | `python core/novel_linter.py` |
-| **Auto-Healer 文本自愈修复器** | `python core/auto_healer.py` |
-| **宏观反土拨鼠跨章纵向审查** | `python core/longitudinal_linter.py` |
-| **World State Ledger 因果状态机** | `python core/world_state_ledger.py` |
-| **四场次渐进缝合扩写器** | `python core/scene_expander.py` |
+| **Auto-Healer 文本多变体自愈** | `python core/auto_healer.py` |
+| **宏观反土拨鼠跨章行为审查** | `python core/longitudinal_linter.py` |
+| **World State Ledger 状态账本** | `python core/world_state_ledger.py` |
+| **正文因果状态增量提取器** | `python core/state_diff_extractor.py` |
 | **名作整卷张力潮汐心电图逆向** | `python core/macro_tension_analyzer.py` |
 | **Grill-Me 总编级立项质询** | `python core/grill_engine.py` |
 | **跨章节伏笔与时间锁追踪** | `python core/plot_tracker.py` |

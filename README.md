@@ -1,4 +1,4 @@
-# 📖 NovelCrafting-Plugin 工业级通用小说创作引擎 (v3.0.0)
+# 📖 NovelCrafting-Plugin 工业级通用小说创作引擎 (v3.1.0)
 
 > 一款工业级、全题材解耦的中文长篇小说辅助创作与“去 AI 塑料味”双层流水线插件引擎。  
 > 🌟 **全生态原生兼容**：原生适配 **Claude Code (`cc`)**、**DeepSeek Harness (`dsh`)**、**OpenAI Codex (`codex`)**、**Google Antigravity (`agy`)**、**Cursor / Windsurf** 以及 **Obsidian 本地知识库**。
@@ -53,25 +53,29 @@ NovelCrafting-Plugin/
 ├── 🚀 启动助手.bat                 ← Windows 便携双击交互入口
 ├── ⚙️ 启动助手.ps1                 ← 交互控制台主逻辑 (13 选 1 极速面板)
 │
-├── 📂 core/                        ← 【13 大核心执行引擎模块】
+├── 📂 core/                        ← 【14 大核心执行引擎模块】
 │   ├── narrative_engine.py        ← 模块1: Pass 1 剧力事件骨架生成与断言器
 │   ├── style_compiler.py          ← 模块2: 一键文风特征挖掘与编译器
 │   ├── prompt_builder.py          ← 模块3: Few-Shot 原著切片与四场次提示词编译
 │   ├── novel_linter.py            ← 模块4: Universal Fiction Linter 代码级质检器
-│   ├── auto_healer.py             ← 模块5: 违规文本自愈修复器 (定向物理化，满分自愈)
-│   ├── longitudinal_linter.py     ← 模块6: 跨章节‘反土拨鼠之日’纵向向量审查器
+│   ├── auto_healer.py             ← 模块5: 违规文本自愈修复器 (多变体生理物理化与语境重写)
+│   ├── longitudinal_linter.py     ← 模块6: 跨章节反土拨鼠行为意图原型审查器
 │   ├── world_state_ledger.py      ← 模块7: 长程因果与世界线状态账本 (防吃书)
-│   ├── scene_expander.py          ← 模块8: 四场次物理渐进生成与拼接引擎 (锁定3000字)
-│   ├── macro_tension_analyzer.py  ← 模块9: 名作整卷张力潮汐逆向解构器 (ASCII心电图)
-│   ├── grill_engine.py            ← 模块10: 总编级 Grill-Me 地基质询器 (6大承重柱)
-│   ├── plot_tracker.py            ← 模块11: 跨章节伏笔与时间锁追踪器
-│   ├── branching_generator.py     ← 模块12: 剧情十字路口 A/B/C 三走向推演
+│   ├── state_diff_extractor.py    ← 模块8: 正文因果状态增量提取器 (反向更新状态机)
+│   ├── scene_expander.py          ← 模块9: 四场次多轮流式执笔调度引擎 (锁定3000字)
+│   ├── macro_tension_analyzer.py  ← 模块10: 名作整卷张力潮汐逆向解构器 (ASCII心电图)
+│   ├── grill_engine.py            ← 模块11: 总编级 Grill-Me 地基质询器 (6大承重柱)
+│   ├── plot_tracker.py            ← 模块12: 跨章节伏笔与时间锁追踪器
+│   ├── branching_generator.py     ← 模块13: 剧情十字路口 A/B/C 三走向推演
 │   └── novel_pipeline.py          ← 双层流水线总调度集成入口
 │
-├── 📂 profiles/                    ← 【预编译名家文风画像库】(JSON + MD)
-│   ├── 微微一笑很倾城_顾漫.json / .md
-│   ├── 道诡异仙_狐尾的笔.json / .md
-│   └── 大奉打更人_卖报小郎君.json / .md
+├── 📂 profiles/                    ← 【预编译 6 大名家文风画像库】(JSON + MD)
+│   ├── 微微一笑很倾城_顾漫.json / .md       (都市甜宠/反差轻吐槽)
+│   ├── 道诡异仙_狐尾的笔.json / .md         (民俗克系/真假精神撕裂)
+│   ├── 大奉打更人_卖报小郎君.json / .md     (仙侠探案/市井骚话爽文)
+│   ├── 三体_刘慈欣.json / .md               (硬核科幻/宏大宇宙规律冷硬哲学)
+│   ├── 诡秘之主_爱潜水的乌贼.json / .md     (西方魔幻/蒸汽克苏鲁/序列魔药)
+│   └── 长安十二时辰_马伯庸.json / .md       (历史考据/悬疑谍战/倒计时硬核)
 │
 ├── 📂 corpus/                      ← 【参考名作语料池】
 ├── 📂 rules/                       ← 【系统级门禁约束】(AGENTS.md)
@@ -99,7 +103,9 @@ NovelCrafting-Plugin/
 - **`[10]` Auto-Healer 自愈修复**：将有瑕疵的草稿一键修复至 100 分纯净正文；
 - **`[11]` 名作整卷张力潮汐**：逆向解构参考名作前 20~30 章张力潮汐心电图；
 - **`[12]` 因果状态机简报**：排查主角负伤倒计时、随身银两与 NPC 疑心矩阵（防吃书）；
-- **`[13]` 挂载至全生态终端**：一键将技能与规则自动分发到 CC / DSH / Codex / Antigravity。
+- **`[13]` 挂载至全生态终端**：一键将技能与规则自动分发到 CC / DSH / Codex / Antigravity；
+- **`[14]` 提取正文因果增量**：从本章正文中反向挖掘伤情、财富收支与道具消耗，一键更新状态机；
+- **`[15]` 多轮分场执笔调度**：生成单场次专项扩写指令，彻底杜绝单次生成的 1200 字摘要化偏短问题。
 
 ### 方式 2：作为 MCP Server 接入（Claude Code / Cursor / DSH）
 本插件内置纯 Python 标准库实现的 `mcp_server.py`，支持直接挂载为 MCP 工具服务：
